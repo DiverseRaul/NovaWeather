@@ -19,23 +19,39 @@ tempToggle.addEventListener('click', toggleTemperature);
 // Get weather data from API
 async function getWeather() {
     const city = searchInput.value.trim();
-    if (!city) return;
+    if (!city) {
+        showCustomError('Please enter a city name');
+        return;
+    }
 
     showLoading();
 
     try {
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
-        );
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`;
+        console.log('Fetching weather data...');
+        
+        const response = await fetch(apiUrl);
+        console.log('Response status:', response.status);
 
         if (!response.ok) {
-            throw new Error('City not found');
+            const errorData = await response.json();
+            console.error('API Error:', errorData);
+            
+            if (response.status === 401) {
+                throw new Error('Invalid API key. Note: It may take a few hours for a new API key to become active.');
+            } else if (response.status === 404) {
+                throw new Error('City not found. Please check the spelling and try again');
+            } else {
+                throw new Error(`Weather API Error: ${errorData.message || 'Unable to fetch weather data'}`);
+            }
         }
 
         const data = await response.json();
+        console.log('Weather data received:', data);
         displayWeather(data);
     } catch (error) {
-        showError();
+        console.error('Error fetching weather:', error);
+        showCustomError(error.message);
     }
 }
 
@@ -91,10 +107,18 @@ function hideLoading() {
 }
 
 // Show error message
-function showError() {
+function showCustomError(message) {
     hideLoading();
     weatherInfo.classList.add('hidden');
     errorMessage.classList.remove('hidden');
+    errorMessage.innerHTML = `
+        <i class="fas fa-exclamation-circle"></i>
+        <p>${message}</p>
+    `;
+}
+
+function showError() {
+    showCustomError('Unable to fetch weather data. Please try again later');
 }
 
 // Get user's location weather on page load
@@ -111,7 +135,7 @@ window.addEventListener('load', () => {
                 const data = await response.json();
                 displayWeather(data);
             } catch (error) {
-                showError();
+                showCustomError(error.message);
             }
         }, () => {
             // If user denies location access, we won't show any error
