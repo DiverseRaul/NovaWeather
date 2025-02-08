@@ -3,72 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaWeather</title>
+    <title>BimbaWeather</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>NovaWeather</h1>
+            <h1>BimbaWeather</h1>
             <div class="search-box">
                 <input type="text" placeholder="Enter city name..." id="search-input">
                 <button id="search-btn">
                     <i class="fas fa-search"></i>
                 </button>
+                <button id="settings-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
         </header>
 
-        <main class="weather-container">
-            <div class="weather-info hidden">
-                <div class="location">
-                    <h2 id="city">City Name</h2>
-                    <p id="date">Date</p>
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <span class="close">&times;</span>
                 </div>
-                
-                <div class="weather-main">
-                    <img id="weather-icon" src="" alt="Weather icon">
-                    <div class="temperature">
-                        <h2 id="temp">--°C</h2>
-                        <button id="temp-toggle">Switch to °F</button>
+                <div class="modal-body">
+                    <div class="setting-item">
+                        <label>Theme</label>
+                        <button id="theme-toggle">
+                            <i class="fas fa-moon"></i>
+                            Dark Mode
+                        </button>
+                    </div>
+                    <div class="setting-item">
+                        <label>Temperature Unit</label>
+                        <select id="temp-unit">
+                            <option value="celsius">Celsius (°C)</option>
+                            <option value="fahrenheit">Fahrenheit (°F)</option>
+                        </select>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <main class="main-content">
+            <div class="weather-container">
+                <div class="weather-info hidden">
+                    <h2 id="city"></h2>
+                    <p id="date"></p>
+                    <div class="weather-main">
+                        <div class="temp-container">
+                            <h1 id="temp"></h1>
+                        </div>
+                        <div class="weather-icon-container">
+                            <img id="weather-icon" alt="Weather Icon">
+                            <p id="description"></p>
+                        </div>
+                    </div>
+                    <div class="weather-details">
+                        <div class="detail">
+                            <i class="fas fa-wind"></i>
+                            <div class="detail-info">
+                                <span id="wind-speed"></span>
+                                <p>Wind Speed</p>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-tint"></i>
+                            <div class="detail-info">
+                                <span id="humidity"></span>
+                                <p>Humidity</p>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-temperature-low"></i>
+                            <div class="detail-info">
+                                <span id="feels-like"></span>
+                                <p>Feels Like</p>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-compress-arrows-alt"></i>
+                            <div class="detail-info">
+                                <span id="pressure"></span>
+                                <p>Pressure</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="extra-info-container">
+                <h3>Additional Information</h3>
                 <div class="weather-details">
                     <div class="detail">
-                        <i class="fas fa-wind"></i>
+                        <i class="fas fa-sun"></i>
                         <div class="detail-info">
-                            <span id="wind">-- km/h</span>
-                            <p>Wind Speed</p>
+                            <span id="sunrise"></span>
+                            <p>Sunrise</p>
                         </div>
                     </div>
                     <div class="detail">
-                        <i class="fas fa-tint"></i>
+                        <i class="fas fa-moon"></i>
                         <div class="detail-info">
-                            <span id="humidity">--%</span>
-                            <p>Humidity</p>
+                            <span id="sunset"></span>
+                            <p>Sunset</p>
+                        </div>
+                    </div>
+                    <div class="detail">
+                        <i class="fas fa-eye"></i>
+                        <div class="detail-info">
+                            <span id="visibility"></span>
+                            <p>Visibility</p>
                         </div>
                     </div>
                     <div class="detail">
                         <i class="fas fa-cloud"></i>
                         <div class="detail-info">
-                            <span id="description">--</span>
-                            <p>Condition</p>
+                            <span id="clouds"></span>
+                            <p>Cloud Cover</p>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div id="loading" class="hidden">
-                <div class="spinner"></div>
-                <p>Loading weather data...</p>
-            </div>
-
-            <div id="error-message" class="hidden">
-                <i class="fas fa-exclamation-circle"></i>
-                <p>Unable to fetch weather data. Please try again.</p>
-            </div>
         </main>
+            
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>Loading weather data...</p>
+        </div>
+
+        <div id="error-message" class="hidden">
+            <i class="fas fa-exclamation-circle"></i>
+            <p>Unable to fetch weather data. Please try again.</p>
+        </div>
     </div>
 
     <script src="config.js"></script>

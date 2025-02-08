@@ -1,4 +1,4 @@
-# NovaWeather
+# BimbaWeather
 
 A modern weather application built with HTML, CSS, and JavaScript. Get real-time weather information for any location worldwide.
 
