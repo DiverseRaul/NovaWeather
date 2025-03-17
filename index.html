@@ -64,6 +64,28 @@
                             <option value="imperial">Fahrenheit</option>
                         </select>
                     </div>
+                    <div class="setting-item">
+                        <label for="wind-unit">Wind Speed Unit</label>
+                        <select id="wind-unit">
+                            <option value="ms">m/s</option>
+                            <option value="kmh">km/h</option>
+                            <option value="mph">mph</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="time-format">Time Format</label>
+                        <select id="time-format">
+                            <option value="12h">12-hour</option>
+                            <option value="24h">24-hour</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="animation-toggle">Animations</label>
+                        <button id="animation-toggle" class="theme-toggle">
+                            <i class="fas fa-toggle-on"></i>
+                            <span>Enabled</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,6 +105,15 @@
                                 <p id="description"></p>
                             </div>
                         </div>
+                        
+                        <div id="weather-alert" class="weather-alert hidden">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="weather-alert-content">
+                                <h4 id="alert-title">Weather Alert</h4>
+                                <p id="alert-description"></p>
+                            </div>
+                        </div>
+                        
                         <div class="weather-details">
                             <div class="detail">
                                 <i class="fas fa-wind"></i>
@@ -113,41 +144,249 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Forecast Section -->
+                        <div class="forecast-container">
+                            <h3>5-Day Forecast</h3>
+                            <div class="forecast-scroll" id="forecast-scroll">
+                                <!-- Forecast items will be added dynamically -->
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="extra-info-container">
-                    <h3>Additional Information</h3>
-                    <div class="weather-details">
-                        <div class="detail">
-                            <i class="fas fa-sun"></i>
-                            <div class="detail-info">
-                                <span id="sunrise"></span>
-                                <p>Sunrise</p>
+                    <div class="tabs-container">
+                        <div class="tabs-header">
+                            <button class="tab-button active" data-tab="details">Details</button>
+                            <button class="tab-button" data-tab="air-quality">Air Quality</button>
+                            <button class="tab-button" data-tab="map">Map</button>
+                        </div>
+                        
+                        <div id="details-tab" class="tab-content active">
+                            <h3>Additional Information</h3>
+                            <div class="weather-details">
+                                <div class="detail">
+                                    <i class="fas fa-sun"></i>
+                                    <div class="detail-info">
+                                        <span id="sunrise"></span>
+                                        <p>Sunrise</p>
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <i class="fas fa-moon"></i>
+                                    <div class="detail-info">
+                                        <span id="sunset"></span>
+                                        <p>Sunset</p>
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <i class="fas fa-eye"></i>
+                                    <div class="detail-info">
+                                        <span id="visibility"></span>
+                                        <p>Visibility</p>
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <i class="fas fa-cloud"></i>
+                                    <div class="detail-info">
+                                        <span id="clouds"></span>
+                                        <p>Cloud Cover</p>
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <i class="fas fa-compass"></i>
+                                    <div class="detail-info">
+                                        <span id="wind-direction"></span>
+                                        <p>Wind Direction</p>
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <div class="detail-info">
+                                        <span id="wind-gust"></span>
+                                        <p>Wind Gust</p>
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <i class="fas fa-thermometer-half"></i>
+                                    <div class="detail-info">
+                                        <span id="temp-min"></span>
+                                        <p>Min Temperature</p>
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <i class="fas fa-thermometer-full"></i>
+                                    <div class="detail-info">
+                                        <span id="temp-max"></span>
+                                        <p>Max Temperature</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="detail">
-                            <i class="fas fa-moon"></i>
-                            <div class="detail-info">
-                                <span id="sunset"></span>
-                                <p>Sunset</p>
+                        
+                        <div id="air-quality-tab" class="tab-content">
+                            <div class="aqi-container">
+                                <h3>Air Quality Index</h3>
+                                <div class="aqi-info">
+                                    <div class="aqi-value-container">
+                                        <span id="aqi-value">--</span>
+                                        <span id="aqi-text">--</span>
+                                    </div>
+                                    <div class="aqi-bar-container">
+                                        <div id="aqi-level" class="aqi-level"></div>
+                                    </div>
+                                    <div class="aqi-scale">
+                                        <span>Good</span>
+                                        <span>Moderate</span>
+                                        <span>Poor</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="collapsible-btn" data-target="aqi-legend">
+                                    <span>What do these values mean?</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div id="aqi-legend" class="collapsible-content">
+                                    <div class="aqi-legend">
+                                        <div class="aqi-legend-item">
+                                            <div class="aqi-dot aqi-good"></div>
+                                            <span>1-2: Good - Minimal health impact</span>
+                                        </div>
+                                        <div class="aqi-legend-item">
+                                            <div class="aqi-dot aqi-moderate"></div>
+                                            <span>3: Moderate - May affect sensitive individuals</span>
+                                        </div>
+                                        <div class="aqi-legend-item">
+                                            <div class="aqi-dot aqi-poor"></div>
+                                            <span>4-5: Poor to Very Poor - Health risk for everyone</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3>Pollutants</h3>
+                                <div class="pollutants-grid">
+                                    <div class="pollutant-card">
+                                        <div class="pollutant-header">
+                                            <i class="fas fa-smog"></i>
+                                            <span>PM2.5</span>
+                                        </div>
+                                        <div id="pm25" class="pollutant-value">-- μg/m³</div>
+                                        <button class="pollutant-info-btn" data-target="pm25-info">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>What is this?</span>
+                                        </button>
+                                        <div id="pm25-info" class="pollutant-info collapsible-content">
+                                            <p>Fine particulate matter</p>
+                                            <div class="pollutant-scale">
+                                                <span class="good">0-10: Good</span>
+                                                <span class="moderate">10-25: Moderate</span>
+                                                <span class="poor">25+: Poor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pollutant-card">
+                                        <div class="pollutant-header">
+                                            <i class="fas fa-smog"></i>
+                                            <span>PM10</span>
+                                        </div>
+                                        <div id="pm10" class="pollutant-value">-- μg/m³</div>
+                                        <button class="pollutant-info-btn" data-target="pm10-info">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>What is this?</span>
+                                        </button>
+                                        <div id="pm10-info" class="pollutant-info collapsible-content">
+                                            <p>Coarse particulate matter</p>
+                                            <div class="pollutant-scale">
+                                                <span class="good">0-20: Good</span>
+                                                <span class="moderate">20-50: Moderate</span>
+                                                <span class="poor">50+: Poor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pollutant-card">
+                                        <div class="pollutant-header">
+                                            <i class="fas fa-wind"></i>
+                                            <span>O₃</span>
+                                        </div>
+                                        <div id="o3" class="pollutant-value">-- μg/m³</div>
+                                        <button class="pollutant-info-btn" data-target="o3-info">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>What is this?</span>
+                                        </button>
+                                        <div id="o3-info" class="pollutant-info collapsible-content">
+                                            <p>Ozone - Can irritate airways</p>
+                                            <div class="pollutant-scale">
+                                                <span class="good">0-60: Good</span>
+                                                <span class="moderate">60-120: Moderate</span>
+                                                <span class="poor">120+: Poor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pollutant-card">
+                                        <div class="pollutant-header">
+                                            <i class="fas fa-industry"></i>
+                                            <span>NO₂</span>
+                                        </div>
+                                        <div id="no2" class="pollutant-value">-- μg/m³</div>
+                                        <button class="pollutant-info-btn" data-target="no2-info">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>What is this?</span>
+                                        </button>
+                                        <div id="no2-info" class="pollutant-info collapsible-content">
+                                            <p>Nitrogen Dioxide - From vehicles & industry</p>
+                                            <div class="pollutant-scale">
+                                                <span class="good">0-40: Good</span>
+                                                <span class="moderate">40-70: Moderate</span>
+                                                <span class="poor">70+: Poor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="collapsible-btn" data-target="health-effects">
+                                    <span>Health Effects & Protective Measures</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div id="health-effects" class="collapsible-content">
+                                    <div class="aqi-explanation">
+                                        <h4>Health Effects</h4>
+                                        <ul>
+                                            <li><strong>PM2.5 & PM10:</strong> Tiny particles that can penetrate deep into lungs and bloodstream. Can cause respiratory and cardiovascular issues.</li>
+                                            <li><strong>Ozone (O₃):</strong> Can trigger asthma, reduce lung function and cause lung diseases. Ground-level ozone is harmful, unlike stratospheric ozone.</li>
+                                            <li><strong>Nitrogen Dioxide (NO₂):</strong> Can inflame airways and increase susceptibility to respiratory infections and allergens.</li>
+                                        </ul>
+                                        <h4>Protective Measures</h4>
+                                        <ul>
+                                            <li>When AQI is poor, limit outdoor activities, especially for sensitive groups.</li>
+                                            <li>Keep windows closed during high pollution events.</li>
+                                            <li>Consider using air purifiers indoors.</li>
+                                            <li>Wear appropriate masks (N95/KN95) when pollution levels are high.</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="detail">
-                            <i class="fas fa-eye"></i>
-                            <div class="detail-info">
-                                <span id="visibility"></span>
-                                <p>Visibility</p>
-                            </div>
-                        </div>
-                        <div class="detail">
-                            <i class="fas fa-cloud"></i>
-                            <div class="detail-info">
-                                <span id="clouds"></span>
-                                <p>Cloud Cover</p>
+                        
+                        <div id="map-tab" class="tab-content">
+                            <h3>Weather Map</h3>
+                            <div id="map"></div>
+                            <div class="map-controls">
+                                <button id="show-temp-layer" class="map-layer-btn">
+                                    <i class="fas fa-temperature-high"></i> Temperature
+                                </button>
+                                <button id="show-precipitation-layer" class="map-layer-btn">
+                                    <i class="fas fa-cloud-rain"></i> Precipitation
+                                </button>
+                                <button id="show-wind-layer" class="map-layer-btn">
+                                    <i class="fas fa-wind"></i> Wind
+                                </button>
+                                <button id="show-clouds-layer" class="map-layer-btn">
+                                    <i class="fas fa-cloud"></i> Clouds
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div id="map"></div>
                 </div>
             </main>
                 
