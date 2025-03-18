@@ -389,6 +389,8 @@ body.dark-mode .weather-icon-container p {
     position: relative;
     overflow: hidden;
     animation: fadeIn 0.8s ease;
+    overflow: hidden;
+    word-break: break-word;
 }
 
 body.dark-mode .detail {
@@ -443,6 +445,8 @@ body.dark-mode .detail {
     gap: 4px;
     position: relative;
     z-index: 2;
+    flex: 1;
+    min-width: 0;
 }
 
 .detail-info span {
@@ -450,6 +454,8 @@ body.dark-mode .detail {
     color: var(--text-primary-light);
     font-weight: bold;
     transition: color 0.2s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 body.dark-mode .detail-info span {
@@ -461,6 +467,8 @@ body.dark-mode .detail-info span {
     font-size: 1rem;
     margin: 0;
     transition: color 0.2s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 body.dark-mode .detail-info p {
@@ -771,244 +779,189 @@ body.dark-mode .loading-content h1 {
 .modal {
     display: none;
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.modal.show {
-    display: flex;
-    opacity: 1;
-    visibility: visible;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
-    background: var(--light-card-bg);
-    border-radius: 15px;
-    padding: 0;
-    width: 90%;
-    max-width: 500px;
-    margin: auto;
     position: relative;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-}
-
-.modal.show .modal-content {
-    transform: translateY(0);
-}
-
-body.dark-mode .modal-content {
-    background: var(--card-bg);
-}
-
-.modal-header {
+    background-color: var(--card-bg);
+    margin: 10% auto;
     padding: 20px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    width: 80%;
+    max-width: 500px;
+    animation: slideIn 0.3s ease;
 }
 
-.modal-header h2 {
-    margin: 0;
-    color: var(--text-primary-light);
-    font-size: 1.5rem;
-}
-
-body.dark-mode .modal-header h2 {
-    color: var(--text-primary-dark);
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    color: var(--text-secondary-light);
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-body.dark-mode .close-btn {
-    color: var(--text-secondary-dark);
-}
-
-.close-btn:hover {
-    color: var(--primary-color);
-    background: rgba(var(--primary-color-rgb), 0.1);
-    transform: scale(1.1);
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.setting-item {
-    margin-bottom: 20px;
-}
-
-.setting-item:last-child {
-    margin-bottom: 0;
-}
-
-.setting-item label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text-primary-light);
-    font-weight: 500;
-}
-
-body.dark-mode .setting-item label {
-    color: var(--text-primary-dark);
-}
-
-.setting-item select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid var(--border-color);
-    background: var(--light-bg);
-    color: var(--text-primary-light);
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-body.dark-mode .setting-item select {
-    background: var(--dark-bg);
-    color: var(--text-primary-dark);
-}
-
-.setting-item select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
-}
-
-#settings-btn {
-    padding: 12px;
-    border: none;
-    border-radius: 50%;
-    background: var(--light-card-bg);
-    color: var(--text-primary-light);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-body.dark-mode #settings-btn {
-    background: var(--card-bg);
-    color: var(--text-primary-dark);
-}
-
-#settings-btn:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: rotate(30deg);
-}
-
-.welcome-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
-    text-align: center;
-    padding: 40px;
-    background: var(--light-card-bg);
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
-}
-
-body.dark-mode .welcome-screen {
-    background: var(--card-bg);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.welcome-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.welcome-content i.fa-cloud-sun {
-    font-size: 4rem;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.welcome-content h1 {
-    font-size: 2.5rem;
-    color: var(--text-primary-light);
-    margin: 0;
-}
-
-body.dark-mode .welcome-content h1 {
-    color: var(--text-primary-dark);
-}
-
-.welcome-message {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-}
-
-.welcome-message.hidden {
-    display: none;
-    opacity: 0;
-}
-
-.welcome-message p {
-    font-size: 1.2rem;
-    color: var(--text-secondary-light);
-    margin: 0;
-}
-
-body.dark-mode .welcome-message p {
-    color: var(--text-secondary-dark);
-}
-
-.welcome-message i.fa-arrow-up {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
         transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-20px);
-    }
-    60% {
-        transform: translateY(-10px);
+        opacity: 1;
     }
 }
 
-.hidden {
-    display: none !important;
+.close-modal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    color: var(--text-secondary);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
+.close-modal:hover {
+    color: var(--accent-color);
+}
+
+.modal h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--accent-color);
+    font-size: 1.2rem;
+}
+
+.modal-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: none;
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 5px 0;
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modal-btn:hover {
+    text-decoration: underline;
+}
+
+.modal-btn.small {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    background-color: transparent;
+    color: var(--accent-color);
+    border-radius: 4px;
+}
+
+.modal-btn.small:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.1);
+}
+
+/* Air quality section styles */
+.pollutant-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+}
+
+.pollutant-scale .good {
+    color: #4CAF50;
+}
+
+.pollutant-scale .moderate {
+    color: #FFC107;
+}
+
+.pollutant-scale .poor {
+    color: #F44336;
+}
+
+.aqi-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.aqi-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.aqi-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.aqi-good {
+    background-color: #4CAF50;
+}
+
+.aqi-moderate {
+    background-color: #FFC107;
+}
+
+.aqi-poor {
+    background-color: #F44336;
+}
+
+/* Color coding for pollutant values */
+.text-good {
+    color: #4CAF50 !important;
+}
+
+.text-moderate {
+    color: #FFC107 !important;
+}
+
+.text-poor {
+    color: #F44336 !important;
+}
+
+/* Pollutant info styles */
+.pollutant-info p {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* AQI explanation styles */
+.aqi-explanation {
+    word-break: break-word;
+}
+
+.aqi-explanation h4 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+    font-size: 1rem;
+}
+
+.aqi-explanation ul {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.aqi-explanation li {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* Responsive Media Queries */
 @media (max-width: 1200px) {
     .main-content {
         grid-template-columns: 1fr;
@@ -1161,28 +1114,6 @@ body.dark-mode .welcome-message p {
     }
 }
 
-/* Responsive Media Queries */
-@media (max-width: 600px) {
-    .weather-details {
-        grid-template-columns: 1fr;
-    }
-    
-    #search-input {
-        width: 200px;
-    }
-    
-    .weather-container {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 900px) {
-    .weather-boxes {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-}
-
 .hidden {
     display: none !important;
     visibility: hidden !important;
@@ -1302,6 +1233,8 @@ body.dark-mode .welcome-message p {
     transition: all 0.3s ease;
     border: 1px solid rgba(0, 0, 0, 0.05);
     flex: 0 0 auto;
+    position: relative;
+    overflow: hidden;
 }
 
 body.dark-mode .forecast-item {
@@ -1309,31 +1242,69 @@ body.dark-mode .forecast-item {
     border: 1px solid var(--border-color);
 }
 
+.forecast-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-color);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
 .forecast-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(var(--primary-color-rgb), 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.forecast-item:hover::before {
+    opacity: 0.08;
+}
+
+.forecast-item:hover .forecast-day,
+.forecast-item:hover .forecast-temp {
+    color: var(--primary-color);
 }
 
 .forecast-day {
     font-weight: bold;
     margin-bottom: 8px;
+    position: relative;
+    z-index: 2;
+    transition: color 0.2s ease;
 }
 
 .forecast-icon {
     width: 50px;
     height: 50px;
     margin: 5px auto;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+}
+
+.forecast-item:hover .forecast-icon {
+    transform: scale(1.1);
 }
 
 .forecast-temp {
     font-size: 1.1rem;
     font-weight: bold;
+    position: relative;
+    z-index: 2;
+    transition: color 0.2s ease;
 }
 
 .forecast-desc {
     font-size: 0.8rem;
     color: var(--text-secondary-light);
     margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 body.dark-mode .forecast-desc {
@@ -1451,27 +1422,27 @@ body.dark-mode .tab-button {
 .aqi-value-container {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-bottom: 5px;
 }
 
 #aqi-value {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
-    margin-right: 10px;
 }
 
 #aqi-text {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 500;
 }
 
 .aqi-bar-container {
     width: 100%;
-    height: 10px;
-    background-color: var(--bg-secondary);
-    border-radius: 5px;
+    height: 8px;
+    background-color: var(--bg-primary);
+    border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 5px;
+    margin: 8px 0;
 }
 
 .aqi-level {
@@ -1493,33 +1464,60 @@ body.dark-mode .tab-button {
 }
 
 .aqi-scale {
-    width: 100%;
     display: flex;
     justify-content: space-between;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
+    margin-bottom: 8px;
 }
 
-.aqi-legend {
+/* Pollutant scale styles */
+.pollutant-scale {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: var(--bg-secondary);
-    border-radius: 8px;
+    gap: 5px;
+    font-size: 0.8rem;
+    margin-top: 5px;
 }
 
-.aqi-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .weather-details {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+    }
+    
+    .detail {
+        padding: 12px;
+    }
+    
+    .detail i {
+        font-size: 1.3rem;
+        margin-right: 10px;
+    }
+    
+    .detail-info span {
+        font-size: 1.1rem;
+    }
+    
+    #aqi-value {
+        font-size: 1.5rem;
+    }
 }
 
-.aqi-dot {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
+@media (max-width: 480px) {
+    .weather-details {
+        grid-template-columns: 1fr;
+    }
+    
+    .tab-content {
+        padding: 15px;
+    }
+    
+    .collapsible-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
 }
 
 .pollutants-grid {
@@ -1642,6 +1640,24 @@ body.dark-mode .tab-button {
 }
 
 /* Collapsible content styles */
+.collapsible-content {
+    display: none;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.collapsible-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Air quality tab height adjustments */
+#air-quality-tab {
+    min-height: 400px;
+    height: auto;
+}
+
 .collapsible-btn {
     display: flex;
     align-items: center;
@@ -1658,6 +1674,8 @@ body.dark-mode .tab-button {
     margin-bottom: 10px;
     transition: background-color 0.3s ease;
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .collapsible-btn:hover {
@@ -1672,16 +1690,16 @@ body.dark-mode .tab-button {
     transform: rotate(180deg);
 }
 
-.collapsible-content {
-    display: none;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    margin-bottom: 15px;
+.collapsible-btn.small {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    background-color: transparent;
+    color: var(--accent-color);
 }
 
-.collapsible-content.active {
-    display: block;
-    animation: fadeIn 0.5s ease;
+.collapsible-btn.small:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.1);
 }
 
 .pollutant-info-btn {
@@ -1694,33 +1712,68 @@ body.dark-mode .tab-button {
     font-size: 0.9rem;
     cursor: pointer;
     padding: 5px 0;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .pollutant-info-btn:hover {
     text-decoration: underline;
 }
 
-.pollutant-info {
-    margin-top: 5px;
+/* Fix AQI legend positioning */
+#aqi-legend.collapsible-content {
+    margin-top: 0;
+    margin-bottom: 15px;
+    grid-column: 1 / -1;
 }
 
-/* Color coding for pollutant values */
-.text-good {
-    color: #4CAF50 !important;
+/* Reduce spacing in air quality section */
+#air-quality-tab .weather-details {
+    gap: 12px;
 }
 
-.text-moderate {
-    color: #FFC107 !important;
+#air-quality-tab .detail {
+    padding: 12px;
 }
 
-.text-poor {
-    color: #F44336 !important;
+.aqi-bar-container {
+    width: 100%;
+    height: 6px;
+    background-color: var(--bg-primary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 6px 0;
 }
 
-/* Pollutant info styles */
-.pollutant-info p {
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+.aqi-level {
+    height: 100%;
+    width: 0;
+    transition: width 1s ease-in-out;
+}
+
+.aqi-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
     color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.aqi-value-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+#aqi-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#aqi-text {
+    font-size: 0.9rem;
+    font-weight: 500;
 }

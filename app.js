@@ -148,8 +148,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateTheme(settings.darkMode);
     updateAnimationToggle(settings.animations);
     
-    // Initialize collapsible content
-    initCollapsibleContent();
+    // Initialize modals
+    initModals();
     
     // Show loading screen while getting location
     loadingScreen.classList.remove('hidden');
@@ -641,21 +641,42 @@ function colorCodePollutant(elementId, value, thresholds) {
     }
 }
 
-// Initialize collapsible content
-function initCollapsibleContent() {
-    const collapsibleButtons = document.querySelectorAll('.collapsible-btn, .pollutant-info-btn');
+// Initialize modals
+function initModals() {
+    const modalButtons = document.querySelectorAll('.modal-btn');
+    const closeButtons = document.querySelectorAll('.close-modal');
+    const modals = document.querySelectorAll('.modal');
     
-    collapsibleButtons.forEach(button => {
+    // Open modal when button is clicked
+    modalButtons.forEach(button => {
         button.addEventListener('click', function() {
             const targetId = this.getAttribute('data-target');
-            const targetContent = document.getElementById(targetId);
+            const targetModal = document.getElementById(targetId);
             
-            // Toggle active class on button
-            this.classList.toggle('active');
-            
-            // Toggle active class on content
-            if (targetContent) {
-                targetContent.classList.toggle('active');
+            if (targetModal) {
+                targetModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+        });
+    });
+    
+    // Close modal when X is clicked
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+            }
+        });
+    });
+    
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', function(event) {
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
             }
         });
     });
@@ -808,12 +829,56 @@ function showError(message) {
 window.addEventListener('load', () => {
     setTimeout(() => {
         if (loadingScreen) {
-            loadingScreen.classList.add('fade-out');
+            loadingScreen.style.opacity = '0';
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
             }, 500);
         }
-    }, 1500);
+    }, 1000);
+    
+    // Initialize tabs
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+    
+    // Initialize modals
+    initModals();
+    
+    // Get user's location if available
+    if (locationBtn) {
+        locationBtn.addEventListener('click', getUserLocation);
+    }
+    
+    // Set up search functionality
+    if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', () => {
+            const city = searchInput.value.trim();
+            if (city) {
+                getWeather(city);
+            }
+        });
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const city = searchInput.value.trim();
+                if (city) {
+                    getWeather(city);
+                }
+            }
+        });
+    }
 });
 
 // Settings functionality
